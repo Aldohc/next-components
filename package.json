@@ -13,27 +13,28 @@
     "deploy:vercel": "vercel"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.0",
-    "@chakra-ui/react": "^2.0.0",
-    "@emotion/react": "^11.0.0",
-    "@emotion/styled": "^11.0.0",
-    "@types/node": "22.1.0",
-    "@types/react": "18.3.3",
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@types/react-dom": "18.3.0",
-    "eslint": "9.8.0",
     "eslint-config-next": "14.2.5",
-    "framer-motion": "^9.0.0",
+    "framer-motion": "^10.18.0",
     "next": "14.2.5",
+    "next-plausible": "^3.12.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-hook-form": "^7.0.0",
+    "react-hook-form": "^7.52.2",
     "typescript": "5.5.4"
   },
   "devDependencies": {
-    "@tanstack/react-query": "^4.0.0",
-    "@tanstack/react-query-devtools": "^4.0.0",
-    "eslint-config-prettier": "^8.0.0",
-    "prettier": "^2.0.0",
-    "vercel": "^30.2.2"
+    "@tanstack/react-query": "^4.36.1",
+    "@tanstack/react-query-devtools": "^4.36.1",
+    "@types/node": "^18.15.13",
+    "@types/react": "^18.0.37",
+    "eslint": "9.8.0",
+    "eslint-config-prettier": "^8.10.0",
+    "prettier": "^2.8.8",
+    "vercel": "^30.2.3"
   }
 }
