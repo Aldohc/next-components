@@ -23,11 +23,11 @@ type OptionKey =
   | "type"
 
 const options = {
-  index: { key: "index", value: "index.tsx", label: "Index" },
-  constant: { key: "constant", value: "constants.ts", label: "Constant" },
-  hooks: { key: "hooks", value: "hooks.ts", label: "Hook" },
-  schema: { key: "schema", value: "schemas.ts", label: "Schema" },
-  type: { key: "type", value: "types.ts", label: "Type" },
+  index: { key: "index", value: "i", label: "View" },
+  constant: { key: "constant", value: "c", label: "Constant" },
+  hooks: { key: "hooks", value: "h", label: "Hook" },
+  schema: { key: "schema", value: "s", label: "Schema" },
+  type: { key: "type", value: "t", label: "Type" },
 } satisfies {
   [Key in OptionKey]: {
     key: Key
@@ -39,6 +39,7 @@ const options = {
 const optionKeys = objectToKeyToKeyMap(options)
 
 const formattingOptionKeys = [
+  optionKeys.index,
   optionKeys.constant,
   optionKeys.hooks,
   optionKeys.schema,
@@ -60,7 +61,7 @@ const defaultFormData: ComponentsFormData = {
   rootFolder: "features",
   projectName: "my-feature",
   viewFolder: "FeatureList",
-  formatting: [optionKeys.constant, optionKeys.hooks, optionKeys.schema, optionKeys.type],
+  formatting: [optionKeys.index, optionKeys.constant, optionKeys.hooks, optionKeys.schema, optionKeys.type],
 }
 
 const formDataKeys = objectToKeyToKeyMap(defaultFormData)
@@ -68,7 +69,7 @@ const formDataKeys = objectToKeyToKeyMap(defaultFormData)
 const categoryLabels = {
   rootFolder: "Root Folder",
   projectName: "Parent Folder",
-  viewFolder: "View Folder",
+  viewFolder: "Component Name",
   formatting: "File",
 } as const
 
@@ -89,28 +90,39 @@ export const ComponentsForm: React.FC = () => {
     const calculateCommand = (formData: ComponentsFormData) => {
       const args = []
 
-      const path = `${formData.rootFolder}/${formData.projectName}/views/${formData.viewFolder}`;
+      const path = `${formData.rootFolder}/${formData.projectName}/views`;
 
-      args.push(`mkdir -p ${path} &&`)
-      // args.push(`--styling=${options[formData.styling].value}`)
+      args.push(`new-component ${formData.viewFolder} -d ${path}`)
 
-      const pushArgs = (selectedOptionKeys: Array<keyof typeof options>) => {
-        args.push(`touch ${path}/${options.index.value}`)
-        args.push(`touch ${path}/${formData.viewFolder}.tsx`)
-        selectedOptionKeys.forEach((optionKey) => {
-          args.push(`touch ${path}/${formData.viewFolder}.${options[optionKey].value}`)
-        })
+      const pushArgs = (selectedOptionKeys: OptionKey[]) => {
+        // Check if 'schema' is selected
+        const schemaSelected = selectedOptionKeys.includes('schema')
+
+        if (!schemaSelected && selectedOptionKeys.length >= 4) {
+          // If 'schema' is not selected, push '-all'
+          args.push('-all')
+        } else if (schemaSelected && selectedOptionKeys.length === 5) {
+          // Otherwise, push individual options
+          selectedOptionKeys.forEach(optionKey => {
+            if (optionKey === 'schema') {
+              args.push(`-all -s`)
+            }
+          })
+        } else {
+          // Add '-all' for all other options
+          const otherOptions = formattingOptionKeys.filter(key => key !== 'schema')
+          selectedOptionKeys.forEach(optionKey => {
+            args.push(`-${options[optionKey].value}`)
+          })
+        }
       }
 
       pushArgs(formData.formatting)
 
       const projectNameSegments = formData.projectName.split("/")
-      const lastPartOfProjectName = projectNameSegments.pop()!
-      args.push(lastPartOfProjectName)
 
       return args.join(" ")
     }
-    console.log("modal.....", JSON.stringify(formData))
     setCommand(calculateCommand(formData))
     setIsModalShown(true)
   }

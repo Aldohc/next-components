@@ -26,7 +26,7 @@ const LandingPageTemplate = () => {
   return (
     <>
       <Global styles={globalStyles} />
-      <Flex direction="column" gap="16" alignItems="center" py="16">
+      <Flex direction="column" gap="1" alignItems="center" py="16">
         <HeaderSection />
         <Flex
           as="main"
